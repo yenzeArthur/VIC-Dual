@@ -1,6 +1,13 @@
 //#include <stdio.h>
 #include <string.h>
+
 typedef unsigned char byte;
+typedef unsigned short word;
+
+__sfr __at (0x0) input0;
+__sfr __at (0x1) input1;
+__sfr __at (0x2) input2;
+__sfr __at (0x3) input3;
 
 void main();
 
@@ -50,12 +57,37 @@ void putstring(byte x, byte y, const char* string) {
   }
 }
 
+const char BOX_CHARS[8] = { 218, 191, 192, 217, 196, 196, 179, 179 };
+
+void draw_box(byte x, byte y, byte x2, byte y2, const char chars[8]) {
+  byte x1 = x;
+  putchar(x, y, chars[2]);
+  putchar(x2, y, chars[3]);
+  putchar(x, y2, chars[0]);
+  putchar(x2, y2, chars[1]);
+  while (++x < x2) {
+    putchar(x, y, chars[5]);
+    putchar(x, y2, chars[4]);
+  }
+  while (++y < y2) {
+    putchar(x1, y, chars[6]);
+    putchar(x2, y, chars[7]);
+  }
+}
+
+void show_character(){
+  byte i;
+  for(i=0; i<=2; i++){
+    putchar((6+i), (6), 254);
+  }
+  putchar((6+3),6,'>');
+}
+
 void main() {
-  /*unsigned char byteval = 123;
-  signed char charval = 123;
-  short shortval = 12345;*/
   setup_stdio();
-  putstring(10,31,"Game On!");
+  draw_box(0, 0, 27, 31, BOX_CHARS);
+  //putchar(26,30,254);
+  show_character();
   while(1);
   /*while (1) {
     printf("char %d byte %u sh %d\n",
